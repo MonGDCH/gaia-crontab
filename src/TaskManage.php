@@ -31,7 +31,7 @@ class TaskManage implements TaskInterface
     protected function __construct()
     {
         // 获取任务驱动对象，默认 Job 驱动
-        $driver = Config::instance()->get('crontab.driver', Job::class);
+        $driver = Config::instance()->get('crontab.app.driver', Job::class);
         $this->driver = new $driver();
     }
 
