@@ -20,8 +20,8 @@ interface CrontabEnum
     const TASK_TYPE = [
         // 对象方法任务
         'class' => 0,
-        // URL请求任务
-        'url'   => 1,
+        // http请求任务
+        'http'   => 1,
     ];
 
     /**
@@ -32,8 +32,8 @@ interface CrontabEnum
     const TASK_TYPE_TITLE = [
         // 类方法任务
         self::TASK_TYPE['class']    => '对象方法任务',
-        // URL任务
-        self::TASK_TYPE['url']      => 'URL请求任务',
+        // http任务
+        self::TASK_TYPE['http']     => 'http请求任务',
     ];
 
     /**

@@ -192,7 +192,7 @@ class Server implements ProcessInterface
         $data = TaskManage::instance()->getTask($id);
         if ($data && $this->decorateRunnable($data)) {
             // 处理定时任务
-            if (in_array($data['type'], [CrontabEnum::TASK_TYPE['class'], CrontabEnum::TASK_TYPE['url']])) {
+            if (in_array($data['type'], [CrontabEnum::TASK_TYPE['class'], CrontabEnum::TASK_TYPE['http']])) {
                 $crontab = new Crontab($data['rule'], function () use ($data) {
                     $time = time();
                     $startTime = microtime(true);
@@ -214,19 +214,19 @@ class Server implements ProcessInterface
                                 'params'    => $data['params'] ?? [],
                             ];
                             break;
-                        case CrontabEnum::TASK_TYPE['url']:
+                        case CrontabEnum::TASK_TYPE['http']:
                             // URL网络请求
                             $url = trim($data['target']);
                             $params = $data['params'] ?? [];
                             $method = $params['method'] ?? 'GET';
                             $header = $params['header'] ?? [];
-                            $timeOut = $params['timeOut'] ?? 5;
+                            $timeout = $params['timeout'] ?? 5;
                             $ua = $params['ua'] ?? '';
                             $deliveryData = [
                                 'url'       => $url,
                                 'method'    => $method,
                                 'header'    => $header,
-                                'timeOut'   => $timeOut,
+                                'timeout'   => $timeout,
                                 'ua'        => $ua,
                                 'data'      => $params['data'] ?? []
                             ];

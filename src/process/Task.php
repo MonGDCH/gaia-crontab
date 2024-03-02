@@ -83,7 +83,7 @@ class Task implements ProcessInterface
                 // 类对象方法
                 $result = $this->classHandler($event['data']);
                 break;
-            case CrontabEnum::TASK_TYPE['url']:
+            case CrontabEnum::TASK_TYPE['http']:
                 // URl请求任务
                 $result = $this->urlHandler($event['data']);
                 break;
@@ -136,9 +136,9 @@ class Task implements ProcessInterface
             $data = $query['data'] ?? [];
             $method = $query['method'] ?? 'GET';
             $header = $query['header'] ?? [];
-            $timeOut = $query['timeOut'] ?? 5;
+            $timeout = $query['timeout'] ?? 5;
             $ua = $query['ua'] ?? '';
-            $msg = Network::instance()->sendHTTP($query['url'], $data, $method, $header, false, $timeOut, $ua);
+            $msg = Network::instance()->sendHTTP($query['url'], $data, $method, $header, false, $timeout, $ua);
         } catch (Throwable $e) {
             $code = 0;
             $msg = $e->getMessage();

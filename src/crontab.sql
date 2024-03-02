@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS `crontab` (
     `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
     `title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '任务标题',
-    `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '任务类型 0 class, 1 url',
+    `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '任务类型 0 class, 1 http',
     `rule` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '任务执行表达式',
     `target` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '调用任务字符串',
     `params` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '任务调用参数',
