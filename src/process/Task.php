@@ -7,11 +7,13 @@ namespace process\crontab;
 use Throwable;
 use mon\log\Logger;
 use mon\env\Config;
+use mon\thinkOrm\ORM;
 use Workerman\Worker;
 use mon\util\Network;
 use gaia\ProcessTrait;
 use mon\util\Container;
 use gaia\crontab\CrontabEnum;
+use support\cache\CacheService;
 use gaia\interfaces\ProcessInterface;
 use Workerman\Connection\TcpConnection;
 
@@ -60,6 +62,7 @@ class Task implements ProcessInterface
         Logger::instance()->setDefaultChannel($log_channel);
         // 数据库初始化
         // $config = Config::instance()->get('database', []);
+        // ORM::register(true, $config, Logger::instance()->channel(), CacheService::instance()->getService()->store());
     }
 
 

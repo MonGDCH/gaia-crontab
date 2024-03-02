@@ -100,7 +100,7 @@ class Server implements ProcessInterface
         Logger::instance()->setDefaultChannel($log_channel);
         // 数据库初始化
         // $config = Config::instance()->get('database', []);
-        // ORM::register(defined('IN_WORKERMAN'), $config, Logger::instance()->channel(), CacheService::instance()->getService()->store());
+        // ORM::register(true, $config, Logger::instance()->channel(), CacheService::instance()->getService()->store());
         // 初始化加载现有启动的定时任务
         $taskList = TaskManage::instance()->getTaskList();
         foreach ($taskList as $item) {
