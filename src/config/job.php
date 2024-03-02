@@ -1,0 +1,32 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| 定时任务配置文件
+|--------------------------------------------------------------------------
+| 定义执行的定时任务，当定时任务驱动对象为 Job 时有效
+|
+*/
+
+use gaia\crontab\CrontabEnum;
+
+return [
+    [
+        // 任务名称
+        'title'     => '测试任务',
+        // 任务类型
+        'type'      => CrontabEnum::TASK_TYPE['class'],
+        // 定时执行规则
+        'rule'      => '0/10 * * * * *',
+        // 任务执行目标对象
+        'target'    => '',
+        // 目标对象参数
+        'params'    => [],
+        // 是否单次执行
+        'singleton' => CrontabEnum::SINGLETON_STATUS['more'],
+        // 是否需要记录日志
+        'savelog'   => CrontabEnum::TASK_LOG['enable'],
+        // 是否有效
+        'status'    => CrontabEnum::TASK_STATUS['enable'],
+    ]
+];

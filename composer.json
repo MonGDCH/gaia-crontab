@@ -1,0 +1,29 @@
+{
+    "name": "mongdch/gaia-crontab",
+    "description": "The Gaia Framework crontab process.",
+    "license": "MIT",
+    "homepage": "http://gdmon.com/",
+    "keywords": [
+        "gaia",
+        "workerman",
+        "crontab"
+    ],
+    "authors": [
+        {
+            "name": "Mon",
+            "email": "985558837@qq.com",
+            "homepage": "http://www.gdmon.com/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0",
+        "mongdch/mon-util": "^1.5",
+        "workerman/crontab": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "gaia\\crontab\\": "src/"
+        }
+    }
+}
