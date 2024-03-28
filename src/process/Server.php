@@ -8,7 +8,7 @@ use Throwable;
 use mon\util\Tool;
 use mon\log\Logger;
 use mon\env\Config;
-use mon\thinkOrm\ORM;
+use mon\thinkORM\ORM;
 use Workerman\Worker;
 use gaia\ProcessTrait;
 use gaia\crontab\TaskManage;

@@ -7,7 +7,7 @@ namespace process\crontab;
 use Throwable;
 use mon\log\Logger;
 use mon\env\Config;
-use mon\thinkOrm\ORM;
+use mon\thinkORM\ORM;
 use Workerman\Worker;
 use mon\util\Network;
 use gaia\ProcessTrait;
