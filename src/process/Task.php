@@ -87,8 +87,8 @@ class Task implements ProcessInterface
                 $result = $this->classHandler($event['data']);
                 break;
             case CrontabEnum::TASK_TYPE['http']:
-                // URl请求任务
-                $result = $this->urlHandler($event['data']);
+                // HTTP请求任务
+                $result = $this->httpHandler($event['data']);
                 break;
             default:
                 $result = ['code' => 0, 'msg' => '未支持的异步处理任务类型'];
@@ -124,12 +124,12 @@ class Task implements ProcessInterface
     }
 
     /**
-     * 发起URL请求
+     * 发起HTTP请求
      *
      * @param array $query
      * @return array
      */
-    protected function urlHandler(array $query): array
+    protected function httpHandler(array $query): array
     {
         if (!isset($query['url']) || empty($query['url'])) {
             return ['code' => 0, 'msg' => '请求地址不能为空'];

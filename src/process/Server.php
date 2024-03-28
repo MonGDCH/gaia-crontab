@@ -376,7 +376,7 @@ class Server implements ProcessInterface
     protected function runInSingleton(array $crontab): bool
     {
         $lockName = $this->getTaskLockName($crontab);
-        if (RedisService::instance()->exists($lockName) || !RedisService::instance()->set($lockName, $crontab['title'], ['NX', 'EX' => $this->lock_expires])) {
+        if (RedisService::instance()->exists($lockName) || !RedisService::instance()->set($lockName, $crontab['title'] . '_' . $crontab['id'], ['NX', 'EX' => $this->lock_expires])) {
             return false;
         }
 
@@ -391,7 +391,7 @@ class Server implements ProcessInterface
      */
     protected function getTaskLockName(array $crontab): string
     {
-        return $this->lock_prefix . 'task_' . sha1($crontab['title'] . $crontab['rule']);
+        return $this->lock_prefix . 'task_' . sha1($crontab['title'] . '_' . $crontab['id'] . $crontab['rule']);
     }
 
     /**
@@ -402,6 +402,6 @@ class Server implements ProcessInterface
      */
     protected function getServerLockName(array $crontab): string
     {
-        return $this->lock_prefix . 'server_' . sha1($crontab['title'] . $crontab['rule']);
+        return $this->lock_prefix . 'server_' . sha1($crontab['title'] . '_' . $crontab['id'] . $crontab['rule']);
     }
 }
