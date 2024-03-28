@@ -351,7 +351,7 @@ class Server implements ProcessInterface
     protected function runOnOneServer(array $crontab): bool
     {
         $lockName = $this->getServerLockName($crontab);
-        $macAddress = Tool::instance()->mac_address();
+        $macAddress = Tool::instance()->getMacAddress();
         $result = RedisService::instance()->set($lockName, $macAddress, ['NX', 'EX' => $this->lock_expires]);
         if ($result) {
             return true;
