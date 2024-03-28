@@ -255,8 +255,10 @@ class Server implements ProcessInterface
                     $endTime = microtime(true);
                     // 记录日志，这里不使用事务，不判断结果，因为日志记录失败不会影响任务执行
                     TaskManage::instance()->updateTaskRunning($data['id'], $time);
-                    $this->pool[$data['id']]['last_running_time'] = date('Y-m-d H:i:s', $time);
-                    $this->pool[$data['id']]['running_times']++;
+                    if (isset($this->pool[$data['id']])) {
+                        $this->pool[$data['id']]['last_running_time'] = date('Y-m-d H:i:s', $time);
+                        $this->pool[$data['id']]['running_times']++;
+                    }
                     if ($data['savelog'] == CrontabEnum::TASK_LOG['enable']) {
                         // 记录运行日志
                         TaskManage::instance()->recordTaskLog([
