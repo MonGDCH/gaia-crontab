@@ -99,8 +99,8 @@ class Server implements ProcessInterface
         Logger::instance()->createChannel($log_channel, $log_config);
         Logger::instance()->setDefaultChannel($log_channel);
         // 数据库初始化
-        // $config = Config::instance()->get('database', []);
-        // ORM::register(true, $config, Logger::instance()->channel(), CacheService::instance()->getService()->store());
+        $config = Config::instance()->get('database', []);
+        ORM::register(true, $config, Logger::instance()->channel(), CacheService::instance()->getService()->store());
         // 初始化加载现有启动的定时任务
         $taskList = TaskManage::instance()->getTaskList();
         foreach ($taskList as $item) {
@@ -125,8 +125,8 @@ class Server implements ProcessInterface
 
         $data = json_decode($data, true);
         if ($data && isset($data['fn']) && in_array($data['fn'], $this->allow_fn)) {
-            $data = $data['data'] ?? [];
-            $connection->send(call_user_func([$this, $data['fn']], $data));
+            $params = $data['data'] ?? [];
+            $connection->send(call_user_func([$this, $data['fn']], $params));
             return;
         }
 
@@ -176,6 +176,8 @@ class Server implements ProcessInterface
                 'params'        => $item['params'],
                 'singleton'     => $item['singleton'],
                 'create_time'   => $item['create_time'],
+                'running_times' => $item['running_times'],
+                'last_running_time' => $item['last_running_time']
             ];
         }
         return json_encode(['code' => 1, 'msg' => 'ok', 'data' => $data], JSON_UNESCAPED_UNICODE);
@@ -193,6 +195,7 @@ class Server implements ProcessInterface
         if ($data && $this->decorateRunnable($data)) {
             // 处理定时任务
             if (in_array($data['type'], [CrontabEnum::TASK_TYPE['class'], CrontabEnum::TASK_TYPE['http']])) {
+                // 创建定时任务
                 $crontab = new Crontab($data['rule'], function () use ($data) {
                     $time = time();
                     $startTime = microtime(true);
@@ -252,6 +255,8 @@ class Server implements ProcessInterface
                     $endTime = microtime(true);
                     // 记录日志，这里不使用事务，不判断结果，因为日志记录失败不会影响任务执行
                     TaskManage::instance()->updateTaskRunning($data['id'], $time);
+                    $this->pool[$data['id']]['last_running_time'] = date('Y-m-d H:i:s', $time);
+                    $this->pool[$data['id']]['running_times']++;
                     if ($data['savelog'] == CrontabEnum::TASK_LOG['enable']) {
                         // 记录运行日志
                         TaskManage::instance()->recordTaskLog([
@@ -273,7 +278,9 @@ class Server implements ProcessInterface
                     'rule'          => $data['rule'],
                     'params'        => $data['params'],
                     'singleton'     => $data['singleton'],
-                    'create_time'   => date('Y-m-d H:i:s'),
+                    'create_time'   => date('Y-m-d H:i:s', time()),
+                    'running_times' => 0,
+                    'last_running_time' => '',
                     'crontab'       => $crontab
                 ];
             }

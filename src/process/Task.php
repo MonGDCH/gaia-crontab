@@ -61,8 +61,8 @@ class Task implements ProcessInterface
         Logger::instance()->createChannel($log_channel, $log_config);
         Logger::instance()->setDefaultChannel($log_channel);
         // 数据库初始化
-        // $config = Config::instance()->get('database', []);
-        // ORM::register(true, $config, Logger::instance()->channel(), CacheService::instance()->getService()->store());
+        $config = Config::instance()->get('database', []);
+        ORM::register(true, $config, Logger::instance()->channel(), CacheService::instance()->getService()->store());
     }
 
 

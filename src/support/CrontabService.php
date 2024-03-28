@@ -7,6 +7,7 @@ namespace support\crontab;
 use mon\util\Network;
 use mon\util\Instance;
 use process\crontab\Server;
+use gaia\crontab\TaskManage;
 
 /**
  * 定时任务客户端服务
@@ -67,5 +68,15 @@ class CrontabService
         $port = Server::getListenPort();
         $result = Network::instance()->sendTCP($host, $port, $messgae . "\n", false);
         return trim((string)$result['result']);
+    }
+
+    /**
+     * 获取任务管理器
+     *
+     * @return TaskManage
+     */
+    public function getManage(): TaskManage
+    {
+        return TaskManage::instance();
     }
 }
