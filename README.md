@@ -8,6 +8,14 @@
 
 composer require mongdch/gaia-crontab
 
+php gaia vendor:publish gaia\crontab
+
+```
+
+### 启动
+
+```bash
+php ../bin/crontab start
 ```
 
 - 支持基于数组的`Job`任务定义方式
