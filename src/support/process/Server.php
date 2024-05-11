@@ -98,9 +98,11 @@ class Server implements ProcessInterface
         $log_config = Config::instance()->get('crontab.app.log.config', []);
         Logger::instance()->createChannel($log_channel, $log_config);
         Logger::instance()->setDefaultChannel($log_channel);
+
         // 数据库初始化
-        $config = Config::instance()->get('database', []);
-        ORM::register(true, $config, Logger::instance()->channel(), CacheService::instance()->getService()->store());
+        // $config = Config::instance()->get('database', []);
+        // ORM::register(true, $config, Logger::instance()->channel(), CacheService::instance()->getService()->store());
+
         // 初始化加载现有启动的定时任务
         $taskList = TaskManage::instance()->getTaskList();
         foreach ($taskList as $item) {
