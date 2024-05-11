@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace process\crontab;
+namespace support\crontab\process;
 
 use Throwable;
 use mon\util\Tool;

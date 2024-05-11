@@ -24,7 +24,9 @@ class Install
      *
      * @var array
      */
-    protected static $file_relation = [];
+    protected static $file_relation = [
+        'crontab.php'   => 'bin/crontab'
+    ];
 
     /**
      * 移动的文件夹
@@ -33,7 +35,6 @@ class Install
      */
     protected static $dir_relation = [
         'config'    => 'config/crontab',
-        'process'   => 'process/crontab',
         'support'   => 'support/crontab'
     ];
 
