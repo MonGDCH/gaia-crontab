@@ -35,7 +35,7 @@ return [
         // 任务类型
         'type'      => CrontabEnum::TASK_TYPE['http'],
         // 定时执行规则
-        'rule'      => '0/10 * * * * *',
+        'rule'      => '5 0 * * * *',
         // 任务执行目标对象
         'target'    => 'https://gdmon.com/',
         // 目标对象参数
