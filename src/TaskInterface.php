@@ -44,6 +44,7 @@ interface TaskInterface
      * @return boolean
      */
     public function updateTaskRunning($id, int $running_time, int $times = 1): bool;
+
     /**
      * 记录任务日志
      *

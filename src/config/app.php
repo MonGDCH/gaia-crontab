@@ -9,8 +9,6 @@
 */
 
 return [
-    // 启用
-    'enable'        => false,
     // 定时任务驱动对象
     'driver'        => \gaia\crontab\driver\Job::class,
     // 业务锁缓存前缀

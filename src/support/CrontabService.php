@@ -6,8 +6,8 @@ namespace support\crontab;
 
 use mon\util\Network;
 use mon\util\Instance;
-use process\crontab\Server;
 use gaia\crontab\TaskManage;
+use support\crontab\process\Server;
 
 /**
  * 定时任务客户端服务

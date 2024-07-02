@@ -61,16 +61,6 @@ class Server implements ProcessInterface
     protected $allow_fn = ['reload', 'getPool'];
 
     /**
-     * 是否启用进程
-     *
-     * @return boolean
-     */
-    public static function enable(): bool
-    {
-        return Config::instance()->get('crontab.app.enable', false);
-    }
-
-    /**
      * 获取进程配置
      *
      * @return array
@@ -99,9 +89,16 @@ class Server implements ProcessInterface
         Logger::instance()->createChannel($log_channel, $log_config);
         Logger::instance()->setDefaultChannel($log_channel);
 
-        // 数据库初始化
-        // $config = Config::instance()->get('database', []);
-        // ORM::register(true, $config, Logger::instance()->channel(), CacheService::instance()->getService()->store());
+        // 定义数据库配置，自动识别是否已安装ORM库
+        if (class_exists(ORM::class)) {
+            $config = Config::instance()->get('database', []);
+            // 识别是否存在缓存库
+            if (class_exists(CacheService::class)) {
+                ORM::register(true, $config, Logger::instance()->channel(), CacheService::instance()->getService()->store());
+            } else {
+                ORM::register(true, $config, Logger::instance()->channel());
+            }
+        }
 
         // 初始化加载现有启动的定时任务
         $taskList = TaskManage::instance()->getTaskList();
