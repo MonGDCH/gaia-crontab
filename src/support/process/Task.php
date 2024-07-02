@@ -46,7 +46,7 @@ class Task implements ProcessInterface
     public function onWorkerStart(Worker $worker): void
     {
         // 日志通道初始化
-        $log_channel = Config::instance()->get('ccrontab.app.log.channel', 'crontab');
+        $log_channel = Config::instance()->get('crontab.app.log.channel', 'crontab');
         $log_config = Config::instance()->get('crontab.app.log.config', []);
         Logger::instance()->createChannel($log_channel, $log_config);
         Logger::instance()->setDefaultChannel($log_channel);
