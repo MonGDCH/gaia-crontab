@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace support\crontab\process;
 
 use Throwable;
-use mon\util\Tool;
+use mon\util\OS;
 use mon\log\Logger;
 use mon\env\Config;
 use mon\thinkORM\ORM;
@@ -359,7 +359,7 @@ class Server implements ProcessInterface
     protected function runOnOneServer(array $crontab): bool
     {
         $lockName = $this->getServerLockName($crontab);
-        $macAddress = Tool::instance()->getMacAddress();
+        $macAddress = OS::instance()->getMac();
         $result = RedisService::instance()->set($lockName, $macAddress, ['NX', 'EX' => $this->lock_expires]);
         if ($result) {
             return true;

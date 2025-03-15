@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace gaia\crontab\driver;
 
+use mon\env\Config;
 use mon\log\Logger;
-use think\facade\Db;
+use mon\thinkORM\Db;
 use mon\util\Validate;
 use gaia\crontab\CrontabEnum;
 use gaia\crontab\TaskInterface;
@@ -94,7 +95,7 @@ class Mysql implements TaskInterface
     {
         $save = Db::table($this->crontab)->where('id', $id)->update([
             'status' => CrontabEnum::TASK_STATUS['disable'],
-            'update_time' => time()
+            'update_time' => $this->getTime()
         ]);
         if (!$save) {
             Logger::instance()->channel()->error('Save crontab task singleton info error');
@@ -115,7 +116,7 @@ class Mysql implements TaskInterface
     {
         $save = Db::table($this->crontab)->where('id', $id)->inc('running_times', $times)->data([
             'last_running_time' => $running_time,
-            'update_time' => time()
+            'update_time' => $this->getTime()
         ])->update();
         if (!$save) {
             Logger::instance()->channel()->error('Save crontab task running info error');
@@ -160,7 +161,7 @@ class Mysql implements TaskInterface
             'result'        => $log['result'],
             'return_code'   => $log['return_code'],
             'running_time'  => $log['running_time'],
-            'create_time'   => time()
+            'create_time'   => $this->getTime()
         ]);
         if (!$save) {
             Logger::instance()->channel()->error('Record crontab task log faild');
@@ -168,5 +169,17 @@ class Mysql implements TaskInterface
         }
 
         return true;
+    }
+
+    /**
+     * 获取时间
+     *
+     * @return void
+     */
+    protected function getTime()
+    {
+        $now = time();
+        $format = Config::instance()->get('crontab.app.log_time_format', '');
+        return $format ? date($format, $now) : $now;
     }
 }

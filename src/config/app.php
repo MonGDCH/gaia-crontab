@@ -15,6 +15,8 @@ return [
     'lock_prefix'   => 'mon_crontab_',
     // 业务锁缓存时间
     'lock_expire'   => 600,
+    // 日志时间格式，空则为时间戳
+    'log_time_format' => 'Y-m-d H:i:s',
     // 定时任务进程配置
     'process'       => [
         // 主服务进程

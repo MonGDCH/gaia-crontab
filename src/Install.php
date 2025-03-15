@@ -35,7 +35,8 @@ class Install
      */
     protected static $dir_relation = [
         'config'    => 'config/crontab',
-        'support'   => 'support/crontab'
+        'support'   => 'support/crontab',
+        'command'   => 'command/crontab'
     ];
 
     /**
@@ -63,9 +64,7 @@ class Install
      *
      * @return void
      */
-    public static function uninstall()
-    {
-    }
+    public static function uninstall() {}
 
     /**
      * Gaia发布
