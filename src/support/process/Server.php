@@ -92,12 +92,9 @@ class Server implements ProcessInterface
         // 定义数据库配置，自动识别是否已安装ORM库
         if (class_exists(ORM::class)) {
             $config = Config::instance()->get('database', []);
-            // 识别是否存在缓存库
-            if (class_exists(CacheService::class)) {
-                ORM::register(true, $config, Logger::instance()->channel(), CacheService::instance()->getService()->store());
-            } else {
-                ORM::register(true, $config, Logger::instance()->channel());
-            }
+            // 注册ORM
+            $cache_store = class_exists(CacheService::class) ? CacheService::instance()->getService()->store() : null;
+            ORM::register(false, $config, Logger::instance()->channel(), $cache_store);
         }
 
         // 初始化加载现有启动的定时任务
