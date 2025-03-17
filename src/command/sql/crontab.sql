@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS `crontab` (
     `running_times` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '已运行次数',
     `sendlast_running_time_time` datetime DEFAULT NULL COMMENT '上次运行时间',
     `remark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '备注',
-    `sort` tinyint(3) unsigned NOT NULL DEFAULT '50' COMMENT '排序权重',
+    `idx` tinyint(3) unsigned NOT NULL DEFAULT '50' COMMENT '排序权重',
     `singleton` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否单次执行: 0 是 1 不是',
     `savelog` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否记录日志: 0 否 1 是',
     `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '任务状态状态: 0禁用 1启用',
