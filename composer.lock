@@ -4,8 +4,89 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8ab283d647956a83d598f3b7bd829660",
+    "content-hash": "9df6f5ddc52500563558d243b04ff771",
     "packages": [
+        {
+            "name": "mongdch/mon-env",
+            "version": "1.1.2",
+            "dist": {
+                "type": "zip",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/mongdch/mon-env/1.1.2/mongdch-mon-env-1.1.2.zip",
+                "reference": "0aa7e2a48f5738048b222015e6f82593d850964f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "mon\\env\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "MonGDCH",
+                    "email": "985558837@qq.com"
+                }
+            ],
+            "description": "The php env config utils.",
+            "keywords": [
+                "config",
+                "env"
+            ],
+            "support": {
+                "issues": "https://github.com/MonGDCH/mon-env/issues",
+                "source": "https://github.com/MonGDCH/mon-env/tree/1.1.2"
+            },
+            "time": "2023-11-23T09:03:29+00:00"
+        },
+        {
+            "name": "mongdch/mon-log",
+            "version": "1.0.5",
+            "dist": {
+                "type": "zip",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/mongdch/mon-log/1.0.5/mongdch-mon-log-1.0.5.zip",
+                "reference": "93d3be10ccddce69602e7df103db163427454aaa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "psr/log": "^1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "mon\\log\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mon",
+                    "email": "985558837@qq.com",
+                    "homepage": "http://www.gdmon.com/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The Logger Utils for PSR-3.",
+            "homepage": "http://gdmon.com/",
+            "keywords": [
+                "log",
+                "logger",
+                "psr-3"
+            ],
+            "support": {
+                "issues": "https://github.com/MonGDCH/mon-log/issues",
+                "source": "https://github.com/MonGDCH/mon-log/tree/1.0.5"
+            },
+            "time": "2023-05-23T06:12:58+00:00"
+        },
         {
             "name": "mongdch/mon-think-orm",
             "version": "1.0.6",

@@ -8,8 +8,8 @@ use mon\env\Config;
 use mon\log\Logger;
 use mon\thinkORM\Db;
 use mon\util\Validate;
-use gaia\crontab\CrontabEnum;
 use gaia\crontab\TaskInterface;
+use gaia\crontab\driver\mixins\Variable;
 
 /**
  * Mysql任务管理
@@ -20,6 +20,8 @@ use gaia\crontab\TaskInterface;
  */
 class Mysql implements TaskInterface
 {
+    use Variable;
+
     /**
      * 任务表名
      *
@@ -47,6 +49,8 @@ class Mysql implements TaskInterface
     public function __construct()
     {
         $this->validate = new Validate;
+        $this->log = Config::instance()->get('crontab.log_table', 'crontab_log');
+        $this->crontab = Config::instance()->get('crontab.task_table', 'crontab');
     }
 
     /**
@@ -56,13 +60,8 @@ class Mysql implements TaskInterface
      */
     public function getTaskList(): array
     {
-        $field = ['id', 'title', 'type', 'rule', 'target', 'params', 'singleton', 'savelog', 'status'];
-        $list = Db::table($this->crontab)->where('status', CrontabEnum::TASK_STATUS['enable'])->field($field)->select();
-        $data = [];
-        foreach ($list as $item) {
-            $item['params'] = json_decode($item['params'], true) ?: [];
-            $data[] = $item;
-        }
+        $field = ['id', 'title', 'type', 'rule', 'target', 'params', 'singleton', 'status'];
+        $data = Db::table($this->crontab)->where('status', $this->getStatus('enable'))->field($field)->json(['params'])->select()->toArray();
 
         return $data;
     }
@@ -75,13 +74,12 @@ class Mysql implements TaskInterface
      */
     public function getTask($id): array
     {
-        $field = ['id', 'title', 'type', 'rule', 'target', 'params', 'singleton', 'savelog', 'status'];
-        $info = Db::table($this->crontab)->where('status', CrontabEnum::TASK_STATUS['enable'])->where('id', $id)->field($field)->find();
+        $field = ['id', 'title', 'type', 'rule', 'target', 'params', 'singleton', 'status'];
+        $info = Db::table($this->crontab)->where('status', $this->getStatus('enable'))->where('id', $id)->field($field)->json(['params'])->find();
         if (!$info) {
             return [];
         }
 
-        $info['params'] = json_decode($info['params'], true) ?: [];
         return $info;
     }
 
@@ -94,7 +92,7 @@ class Mysql implements TaskInterface
     public function finishSingletonTask($id): bool
     {
         $save = Db::table($this->crontab)->where('id', $id)->update([
-            'status' => CrontabEnum::TASK_STATUS['disable'],
+            'status' => $this->getStatus('disable'),
             'update_time' => $this->getTime()
         ]);
         if (!$save) {
@@ -108,11 +106,11 @@ class Mysql implements TaskInterface
      * 更新任务最新执行信息
      *
      * @param integer $id           任务ID 
-     * @param integer $running_time 最近运行时间
+     * @param string  $running_time 最近运行时间
      * @param integer $times        运行次数
      * @return boolean
      */
-    public function updateTaskRunning($id, int $running_time, int $times = 1): bool
+    public function updateTaskRunning($id, string $running_time, int $times = 1): bool
     {
         $save = Db::table($this->crontab)->where('id', $id)->inc('running_times', $times)->data([
             'last_running_time' => $running_time,

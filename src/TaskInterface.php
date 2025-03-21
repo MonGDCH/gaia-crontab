@@ -38,12 +38,12 @@ interface TaskInterface
     /**
      * 更新任务最新执行信息
      *
-     * @param mixed $id
-     * @param integer $running_time
-     * @param integer $times
+     * @param mixed     $id
+     * @param string    $running_time
+     * @param integer   $times
      * @return boolean
      */
-    public function updateTaskRunning($id, int $running_time, int $times = 1): bool;
+    public function updateTaskRunning($id, string $running_time, int $times = 1): bool;
 
     /**
      * 记录任务日志

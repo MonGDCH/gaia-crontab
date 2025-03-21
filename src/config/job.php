@@ -8,14 +8,13 @@
 |
 */
 
-use gaia\crontab\CrontabEnum;
 
 return [
     [
         // 任务名称
         'title'     => '测试对象方法任务',
         // 任务类型
-        'type'      => CrontabEnum::TASK_TYPE['class'],
+        'type'      => 0,
         // 定时执行规则
         'rule'      => '0/10 * * * * *',
         // 任务执行目标对象, 使用 @ 定义方法名，默认方法名 handler
@@ -23,17 +22,15 @@ return [
         // 目标对象参数
         'params'    => [],
         // 是否单次执行
-        'singleton' => CrontabEnum::SINGLETON_STATUS['more'],
-        // 是否需要记录日志
-        'savelog'   => CrontabEnum::TASK_LOG['disable'],
+        'singleton' => 0,
         // 是否有效
-        'status'    => CrontabEnum::TASK_STATUS['enable'],
+        'status'    => 1,
     ],
     [
         // 任务名称
         'title'     => '测试HTTP请求任务',
         // 任务类型
-        'type'      => CrontabEnum::TASK_TYPE['http'],
+        'type'      => 1,
         // 定时执行规则
         'rule'      => '5 0 * * * *',
         // 任务执行目标对象
@@ -45,17 +42,11 @@ return [
             // 请求头
             'header'    => [],
             // 请求数据
-            'data'      => ['rc' => 'gaia'],
-            // 请求超时时间
-            'timeOut'   => 5,
-            // 是否需要记录日志
-            'ua'        => ''
+            'data'      => [['name' => 't', 'type' => 'text', 'value' => 'test']],
         ],
         // 是否单次执行
-        'singleton' => CrontabEnum::SINGLETON_STATUS['more'],
-        // 是否需要记录日志
-        'savelog'   => CrontabEnum::TASK_LOG['enable'],
+        'singleton' => 1,
         // 是否有效
-        'status'    => CrontabEnum::TASK_STATUS['enable'],
+        'status'    => 1,
     ]
 ];

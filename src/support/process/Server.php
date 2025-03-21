@@ -12,12 +12,12 @@ use mon\thinkORM\ORM;
 use Workerman\Worker;
 use gaia\ProcessTrait;
 use gaia\crontab\TaskManage;
-use gaia\crontab\CrontabEnum;
 use Workerman\Crontab\Crontab;
 use support\cache\CacheService;
 use support\service\RedisService;
 use gaia\interfaces\ProcessInterface;
 use Workerman\Connection\TcpConnection;
+use gaia\crontab\driver\mixins\Variable;
 use Workerman\Connection\AsyncTcpConnection;
 
 /**
@@ -30,7 +30,7 @@ use Workerman\Connection\AsyncTcpConnection;
  */
 class Server implements ProcessInterface
 {
-    use ProcessTrait;
+    use ProcessTrait, Variable;
 
     /**
      * 任务池
@@ -189,17 +189,19 @@ class Server implements ProcessInterface
     {
         $data = TaskManage::instance()->getTask($id);
         if ($data && $this->decorateRunnable($data)) {
+            $classKey = $this->getType('class');
+            $httpKey = $this->getType('http');
             // 处理定时任务
-            if (in_array($data['type'], [CrontabEnum::TASK_TYPE['class'], CrontabEnum::TASK_TYPE['http']])) {
+            if (in_array($data['type'], [$classKey, $httpKey])) {
                 // 创建定时任务
-                $crontab = new Crontab($data['rule'], function () use ($data) {
-                    $time = time();
+                $crontab = new Crontab($data['rule'], function () use ($data, $classKey, $httpKey) {
+                    $time = date('Y-m-d H:i:s', time());
                     $startTime = microtime(true);
 
                     // 获取投递任务信息
                     $deliveryData = [];
                     switch ($data['type']) {
-                        case CrontabEnum::TASK_TYPE['class']:
+                        case $classKey:
                             // 对象方法调用
                             $class = trim($data['target']);
                             if ($class && strpos($class, '@') !== false) {
@@ -210,10 +212,10 @@ class Server implements ProcessInterface
                             $deliveryData = [
                                 'class'     => $class,
                                 'method'    => $method,
-                                'params'    => $data['params'] ?? [],
+                                'params'    => [],
                             ];
                             break;
-                        case CrontabEnum::TASK_TYPE['http']:
+                        case $httpKey:
                             // URL网络请求
                             $url = trim($data['target']);
                             $params = $data['params'] ?? [];
@@ -234,7 +236,7 @@ class Server implements ProcessInterface
 
                     try {
                         $code = 1;
-                        $exception = 'ok';
+                        $result = 'ok';
                         // 异步处理任务
                         $this->delivery([
                             'type' => $data['type'],
@@ -242,7 +244,7 @@ class Server implements ProcessInterface
                         ]);
                     } catch (Throwable $e) {
                         $code = 0;
-                        $exception = $e->getMessage();
+                        $result = $e->getMessage();
                     } finally {
                         RedisService::instance()->delete($this->getTaskLockName($data));
                     }
@@ -252,20 +254,18 @@ class Server implements ProcessInterface
                     // 记录日志，这里不使用事务，不判断结果，因为日志记录失败不会影响任务执行
                     TaskManage::instance()->updateTaskRunning($data['id'], $time);
                     if (isset($this->pool[$data['id']])) {
-                        $this->pool[$data['id']]['last_running_time'] = date('Y-m-d H:i:s', $time);
+                        $this->pool[$data['id']]['last_running_time'] = $time;
                         $this->pool[$data['id']]['running_times']++;
                     }
-                    if ($data['savelog'] == CrontabEnum::TASK_LOG['enable']) {
-                        // 记录运行日志
-                        TaskManage::instance()->recordTaskLog([
-                            'crontab_id'    => $data['id'],
-                            'target'        => $data['target'],
-                            'params'        => $data['params'] ?? '',
-                            'result'        => $exception ?? '',
-                            'return_code'   => $code,
-                            'running_time'  => round($endTime - $startTime, 6),
-                        ]);
-                    }
+                    // 记录运行日志
+                    TaskManage::instance()->recordTaskLog([
+                        'crontab_id'    => $data['id'],
+                        'target'        => $data['target'],
+                        'params'        => $data['params'] ?? '',
+                        'result'        => $result ?? '',
+                        'return_code'   => $code,
+                        'running_time'  => round($endTime - $startTime, 6),
+                    ]);
                 });
                 // 注册定时任务池
                 $this->pool[$data['id']] = [
@@ -297,11 +297,11 @@ class Server implements ProcessInterface
         $con->onConnect = function (AsyncTcpConnection $con) use ($data) {
             $con->send(json_encode($data, JSON_UNESCAPED_UNICODE));
         };
-        $con->onMessage = function (AsyncTcpConnection $con, $result) {
+        $con->onMessage = function (AsyncTcpConnection $conn, $result) {
             // 异步处理响应结果
             Logger::instance()->channel()->info($result);
             // 断开链接
-            $con->close();
+            $conn->close();
         };
         $con->connect();
     }
@@ -314,7 +314,7 @@ class Server implements ProcessInterface
      */
     protected function isSingleton(array $crontab)
     {
-        if ($crontab['singleton'] == CrontabEnum::SINGLETON_STATUS['once'] && isset($this->pool[$crontab['id']])) {
+        if ($crontab['singleton'] == $this->getSingleton('once') && isset($this->pool[$crontab['id']])) {
             $this->pool[$crontab['id']]['crontab']->destroy();
             unset($this->pool[$crontab['id']]);
             // 更新任务状态

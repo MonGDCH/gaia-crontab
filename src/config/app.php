@@ -15,8 +15,36 @@ return [
     'lock_prefix'   => 'mon_crontab_',
     // 业务锁缓存时间
     'lock_expire'   => 600,
+    // 任务表表名
+    'task_table'    => 'crontab',
+    // 日志表表名
+    'log_table'     => 'crontab_log',
     // 日志时间格式，空则为时间戳
     'log_time_format' => 'Y-m-d H:i:s',
+    // 配置变量对应值
+    'variable' => [
+        // 任务状态
+        'status' => [
+            // 禁用
+            'disable'   => 0,
+            // 启用
+            'enable'    => 1
+        ],
+        // 任务类型
+        'type'  => [
+            // 执行对象方法
+            'class' => 0,
+            // HTTP网络请求
+            'http'  => 1,
+        ],
+        // 执行频率
+        'singleton' => [
+            // 多次
+            'more'  => 0,
+            // 单次
+            'once'  => 1,
+        ],
+    ],
     // 定时任务进程配置
     'process'       => [
         // 主服务进程

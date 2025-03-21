@@ -12,10 +12,10 @@ use Workerman\Worker;
 use mon\util\Network;
 use gaia\ProcessTrait;
 use mon\util\Container;
-use gaia\crontab\CrontabEnum;
 use support\cache\CacheService;
 use gaia\interfaces\ProcessInterface;
 use Workerman\Connection\TcpConnection;
+use gaia\crontab\driver\mixins\Variable;
 
 /**
  * 异步处理定时任务进程
@@ -25,7 +25,7 @@ use Workerman\Connection\TcpConnection;
  */
 class Task implements ProcessInterface
 {
-    use ProcessTrait;
+    use ProcessTrait, Variable;
 
     /**
      * 获取进程配置
@@ -77,11 +77,11 @@ class Task implements ProcessInterface
         }
         $event = json_decode($data, true);
         switch ($event['type']) {
-            case CrontabEnum::TASK_TYPE['class']:
+            case $this->getType('class'):
                 // 类对象方法
                 $result = $this->classHandler($event['data']);
                 break;
-            case CrontabEnum::TASK_TYPE['http']:
+            case $this->getType('http'):
                 // HTTP请求任务
                 $result = $this->httpHandler($event['data']);
                 break;
@@ -108,11 +108,11 @@ class Task implements ProcessInterface
                 $msg = Container::instance()->invokeMethd([$class['class'], $class['method']], [$params]);
             } catch (Throwable $e) {
                 $code = 0;
-                $msg = $e->getMessage();
+                $msg = 'Msg: ' . $e->getMessage() . ' , File: ' . $e->getFile() . ' , Line: ' . $e->getLine();
             }
         } else {
             $code = 0;
-            $msg = "方法或类不存在";
+            $msg = "对象或方法不存在";
         }
 
         return ['code' => $code, 'msg' => $msg];
