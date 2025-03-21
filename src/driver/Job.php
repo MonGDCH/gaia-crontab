@@ -104,7 +104,7 @@ class Job implements TaskInterface
      */
     public function recordTaskLog(array $log): bool
     {
-        $log = 'Task[' . $log['crontab_id'] . '] runing, target: ' . $log['target'] . ', code: ' . $log['return_code'] . ', result: ' . $log['result'] . ', running_time: ' . $log['running_time'];
+        $log = 'Task[' . $log['crontab_id'] . '] runing, target: ' . $log['target'] . ', status: ' . $log['status'] . ', result: ' . $log['result'] . ', running_time: ' . $log['running_time'];
         Logger::instance()->channel()->info($log);
         return true;
     }

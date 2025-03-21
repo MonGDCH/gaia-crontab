@@ -196,7 +196,6 @@ class Server implements ProcessInterface
                 // 创建定时任务
                 $crontab = new Crontab($data['rule'], function () use ($data, $classKey, $httpKey) {
                     $time = date('Y-m-d H:i:s', time());
-                    $startTime = microtime(true);
 
                     // 获取投递任务信息
                     $deliveryData = [];
@@ -235,37 +234,23 @@ class Server implements ProcessInterface
                     }
 
                     try {
-                        $code = 1;
-                        $result = 'ok';
                         // 异步处理任务
-                        $this->delivery([
-                            'type' => $data['type'],
-                            'data' => $deliveryData
-                        ]);
+                        $sendData = ['type' => $data['type'], 'data' => $deliveryData];
+                        $this->delivery($sendData, $data);
                     } catch (Throwable $e) {
-                        $code = 0;
-                        $result = $e->getMessage();
+                        throw $e;
                     } finally {
                         RedisService::instance()->delete($this->getTaskLockName($data));
                     }
+                    // 处理单次运行
                     $this->isSingleton($data);
 
-                    $endTime = microtime(true);
                     // 记录日志，这里不使用事务，不判断结果，因为日志记录失败不会影响任务执行
                     TaskManage::instance()->updateTaskRunning($data['id'], $time);
                     if (isset($this->pool[$data['id']])) {
                         $this->pool[$data['id']]['last_running_time'] = $time;
                         $this->pool[$data['id']]['running_times']++;
                     }
-                    // 记录运行日志
-                    TaskManage::instance()->recordTaskLog([
-                        'crontab_id'    => $data['id'],
-                        'target'        => $data['target'],
-                        'params'        => $data['params'] ?? '',
-                        'result'        => $result ?? '',
-                        'return_code'   => $code,
-                        'running_time'  => round($endTime - $startTime, 6),
-                    ]);
                 });
                 // 注册定时任务池
                 $this->pool[$data['id']] = [
@@ -288,22 +273,35 @@ class Server implements ProcessInterface
     /**
      * 投递到异步进程
      *
-     * @param array $data
+     * @param array $data   投递数据
+     * @param array $task   任务信息
      * @return void
      */
-    protected function delivery(array $data): void
+    protected function delivery(array $data, array $task): void
     {
-        $con = new AsyncTcpConnection(Config::instance()->get('crontab.app.process.task.listen'));
-        $con->onConnect = function (AsyncTcpConnection $con) use ($data) {
-            $con->send(json_encode($data, JSON_UNESCAPED_UNICODE));
+        $startTime = microtime(true);
+        $conn = new AsyncTcpConnection(Config::instance()->get('crontab.app.process.task.listen'));
+        $conn->onConnect = function (AsyncTcpConnection $conn) use ($data) {
+            $conn->send(json_encode($data, JSON_UNESCAPED_UNICODE));
         };
-        $con->onMessage = function (AsyncTcpConnection $conn, $result) {
-            // 异步处理响应结果
-            Logger::instance()->channel()->info($result);
+        $conn->onMessage = function (AsyncTcpConnection $conn, $result) use ($startTime, $task) {
+            $endTime = microtime(true);
             // 断开链接
             $conn->close();
+            // 异步处理响应结果
+            Logger::instance()->channel()->info($result);
+            // 记录运行日志
+            $info = json_decode($result, true);
+            TaskManage::instance()->recordTaskLog([
+                'crontab_id'    => $task['id'],
+                'target'        => $task['target'],
+                'params'        => $task['params'] ? json_encode($task['params'], JSON_UNESCAPED_UNICODE) : '',
+                'status'        => $info['code'] ?? 0,
+                'result'        => $info['msg'] ?? '',
+                'running_time'  => round($endTime - $startTime, 6),
+            ]);
         };
-        $con->connect();
+        $conn->connect();
     }
 
     /**

@@ -7,7 +7,6 @@
 | 定义定时任务配置信息
 |
 */
-
 return [
     // 定时任务驱动对象
     'driver'        => \gaia\crontab\driver\Job::class,

@@ -137,14 +137,14 @@ class Mysql implements TaskInterface
             'target'        => ['required', 'str'],
             'params'        => ['isset', 'str'],
             'result'        => ['isset', 'str'],
-            'return_code'   => ['required', 'int', 'min:0'],
+            'status'        => ['required', 'int', 'min:0'],
             'running_time'  => ['required', 'num'],
         ])->message([
             'crontab_id'    => '任务ID参数错误',
             'target'        => '请输入任务目标',
             'params'        => '请输入任务参数',
             'result'        => '任务响应参数错误',
-            'return_code'   => '任务返回状态参数错误',
+            'status'        => '任务返回状态参数错误',
             'running_time'  => '请输入执行所用时间',
         ])->data($log)->check();
         if (!$check) {
@@ -157,7 +157,7 @@ class Mysql implements TaskInterface
             'target'        => $log['target'],
             'params'        => $log['params'],
             'result'        => $log['result'],
-            'return_code'   => $log['return_code'],
+            'status'        => $log['status'],
             'running_time'  => $log['running_time'],
             'create_time'   => $this->getTime()
         ]);

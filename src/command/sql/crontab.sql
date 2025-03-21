@@ -13,15 +13,15 @@ CREATE TABLE `crontab` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='定时器任务表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='定时器任务表';
 
 CREATE TABLE `crontab_log` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `crontab_id` int(11) unsigned NOT NULL COMMENT '任务id',
   `target` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '任务调用目标字符串',
   `params` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '任务调用参数',
-  `result` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '任务执行或者异常信息输出',
-  `return_code` tinyint(1) unsigned NOT NULL COMMENT '执行返回状态: 0-失败 1-成功',
+  `status` tinyint(1) unsigned NOT NULL COMMENT '执行返回状态: 0-失败 1-成功',
+  `result` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '任务执行结果描述',
   `running_time` float unsigned NOT NULL COMMENT '执行所用时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   PRIMARY KEY (`id`) USING BTREE,

@@ -130,13 +130,23 @@ class Task implements ProcessInterface
             return ['code' => 0, 'msg' => '请求地址不能为空'];
         }
         try {
-            $code = 1;
-            $data = $query['data'] ?? [];
             $method = $query['method'] ?? 'GET';
-            $header = $query['header'] ?? [];
             $timeout = $query['timeout'] ?? 5;
             $ua = $query['ua'] ?? '';
-            $msg = Network::instance()->sendHTTP($query['url'], $data, $method, $header, false, $timeout, $ua);
+            $data = $query['data'] ?? [];
+            $sendData = [];
+            foreach ($data as $v) {
+                $sendData[$v['name']] = $v['value'];
+            }
+            $header = $query['header'] ?? [];
+            $sendHeader = [];
+            foreach ($header as $v) {
+                $sendHeader[$v['name']] = $v['value'];
+            }
+            Network::instance()->sendHTTP($query['url'], $sendData, $method, $sendHeader, false, $timeout, $ua);
+            // 发起网络请求不记录响应内容
+            $code = 1;
+            $msg = 'ok';
         } catch (Throwable $e) {
             $code = 0;
             $msg = $e->getMessage();
