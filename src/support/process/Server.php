@@ -280,11 +280,12 @@ class Server implements ProcessInterface
     protected function delivery(array $data, array $task): void
     {
         $startTime = microtime(true);
+        $now = date('Y-m-d H:i:s', time());
         $conn = new AsyncTcpConnection(Config::instance()->get('crontab.app.process.task.listen'));
         $conn->onConnect = function (AsyncTcpConnection $conn) use ($data) {
             $conn->send(json_encode($data, JSON_UNESCAPED_UNICODE));
         };
-        $conn->onMessage = function (AsyncTcpConnection $conn, $result) use ($startTime, $task) {
+        $conn->onMessage = function (AsyncTcpConnection $conn, $result) use ($startTime, $task, $now) {
             $endTime = microtime(true);
             // 断开链接
             $conn->close();
@@ -294,11 +295,12 @@ class Server implements ProcessInterface
             $info = json_decode($result, true);
             TaskManage::instance()->recordTaskLog([
                 'crontab_id'    => $task['id'],
-                'target'        => $task['target'],
-                'params'        => $task['params'] ? json_encode($task['params'], JSON_UNESCAPED_UNICODE) : '',
+                'running_time'  => round($endTime - $startTime, 6),
+                'run_time'      => $now,
                 'status'        => $info['code'] ?? 0,
                 'result'        => $info['msg'] ?? '',
-                'running_time'  => round($endTime - $startTime, 6),
+                'target'        => $task['target'],
+                'params'        => $task['params'] ? json_encode($task['params'], JSON_UNESCAPED_UNICODE) : ''
             ]);
         };
         $conn->connect();

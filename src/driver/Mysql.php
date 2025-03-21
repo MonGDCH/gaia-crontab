@@ -139,13 +139,15 @@ class Mysql implements TaskInterface
             'result'        => ['isset', 'str'],
             'status'        => ['required', 'int', 'min:0'],
             'running_time'  => ['required', 'num'],
+            'run_time'      => ['required', 'date'],
         ])->message([
             'crontab_id'    => '任务ID参数错误',
-            'target'        => '请输入任务目标',
-            'params'        => '请输入任务参数',
+            'target'        => '任务目标参数错误',
+            'params'        => '任务传参参数错误',
             'result'        => '任务响应参数错误',
             'status'        => '任务返回状态参数错误',
-            'running_time'  => '请输入执行所用时间',
+            'running_time'  => '执行所用时间参数错误',
+            'run_time'      => '任务执行时间参数错误',
         ])->data($log)->check();
         if (!$check) {
             Logger::instance()->channel()->error('Record crontab task log error: ' . $this->validate->getError());
@@ -154,11 +156,12 @@ class Mysql implements TaskInterface
 
         $save = Db::table($this->log)->insert([
             'crontab_id'    => $log['crontab_id'],
+            'run_time'      => $log['run_time'],
+            'running_time'  => $log['running_time'],
+            'status'        => $log['status'],
+            'result'        => $log['result'],
             'target'        => $log['target'],
             'params'        => $log['params'],
-            'result'        => $log['result'],
-            'status'        => $log['status'],
-            'running_time'  => $log['running_time'],
             'create_time'   => $this->getTime()
         ]);
         if (!$save) {

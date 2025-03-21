@@ -18,11 +18,12 @@ CREATE TABLE `crontab` (
 CREATE TABLE `crontab_log` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `crontab_id` int(11) unsigned NOT NULL COMMENT '任务id',
-  `target` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '任务调用目标字符串',
-  `params` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '任务调用参数',
+  `running_time` float unsigned NOT NULL COMMENT '执行所用时间',
+  `run_time` datetime NOT NULL COMMENT '执行任务时间',
   `status` tinyint(1) unsigned NOT NULL COMMENT '执行返回状态: 0-失败 1-成功',
   `result` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '任务执行结果描述',
-  `running_time` float unsigned NOT NULL COMMENT '执行所用时间',
+  `target` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '任务调用目标字符串',
+  `params` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '任务调用参数',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `crontab_id` (`crontab_id`) USING BTREE
