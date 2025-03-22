@@ -20,7 +20,6 @@
         "php": ">=7.2.0",
         "mongdch/mon-util": "^1.5",
         "workerman/crontab": "^1.0",
-        "mongdch/mon-think-orm": "^1.0",
         "mongdch/mon-env": "^1.1",
         "mongdch/mon-log": "^1.0"
     },
