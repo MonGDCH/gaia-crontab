@@ -112,10 +112,10 @@ class Mysql implements TaskInterface
      */
     public function updateTaskRunning($id, string $running_time, int $times = 1): bool
     {
-        $save = Db::table($this->crontab)->where('id', $id)->inc('running_times', $times)->data([
+        $save = Db::table($this->crontab)->where('id', $id)->data([
             'last_running_time' => $running_time,
             'update_time' => $this->getTime()
-        ])->update();
+        ])->inc('running_times', $times)->update();
         if (!$save) {
             Logger::instance()->channel()->error('Save crontab task running info error');
             return false;

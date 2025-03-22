@@ -1,4 +1,4 @@
-CREATE TABLE `crontab` (
+CREATE TABLE IF NOT EXISTS `crontab` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '任务标题',
   `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '任务类型: 0-class, 1-http',
@@ -15,7 +15,7 @@ CREATE TABLE `crontab` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='定时器任务表';
 
-CREATE TABLE `crontab_log` (
+CREATE TABLE IF NOT EXISTS `crontab_log` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `crontab_id` int(11) unsigned NOT NULL COMMENT '任务id',
   `running_time` float unsigned NOT NULL COMMENT '执行所用时间',
