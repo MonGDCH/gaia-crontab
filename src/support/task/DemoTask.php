@@ -20,5 +20,6 @@ class DemoTask
     public function handler()
     {
         echo 'Hello Crontab Task: ' . date('Y-m-d H:i:s') . PHP_EOL;
+        return 'Demo Task runing';
     }
 }

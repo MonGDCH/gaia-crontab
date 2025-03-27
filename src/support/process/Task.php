@@ -146,7 +146,7 @@ class Task implements ProcessInterface
             Network::instance()->sendHTTP($query['url'], $sendData, $method, $sendHeader, false, $timeout, $ua);
             // 发起网络请求不记录响应内容
             $code = 1;
-            $msg = 'ok';
+            $msg = '发起HTTP请求成功';
         } catch (Throwable $e) {
             $code = 0;
             $msg = $e->getMessage();

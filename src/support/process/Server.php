@@ -293,12 +293,21 @@ class Server implements ProcessInterface
             Logger::instance()->channel()->info($result);
             // 记录运行日志
             $info = json_decode($result, true);
+            $result = '';
+            if (isset($info['msg'])) {
+                if (is_array($info['msg'])) {
+                    $result = json_encode($info['msg'], JSON_UNESCAPED_UNICODE);
+                }
+                if (is_string($info['msg'])) {
+                    $result = $info['msg'];
+                }
+            }
             TaskManage::instance()->recordTaskLog([
                 'crontab_id'    => $task['id'],
                 'running_time'  => round($endTime - $startTime, 6),
                 'run_time'      => $now,
                 'status'        => $info['code'] ?? 0,
-                'result'        => $info['msg'] ?? '',
+                'result'        => $result,
                 'target'        => $task['target'],
                 'params'        => $task['params'] ? json_encode($task['params'], JSON_UNESCAPED_UNICODE) : ''
             ]);

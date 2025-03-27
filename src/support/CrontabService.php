@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace support\crontab;
 
+use RuntimeException;
 use mon\util\Network;
-use mon\util\Instance;
 use gaia\crontab\TaskManage;
 use support\crontab\process\Server;
 
@@ -17,21 +17,19 @@ use support\crontab\process\Server;
  */
 class CrontabService
 {
-    use Instance;
-
     /**
      * 获取当前正在运行的任务
      *
      * @throws \Throwable    服务进程链接失败抛出异常
      * @return array
      */
-    public function getPool(): array
+    public static function getPool(): array
     {
         $cammad = json_encode(['fn' => 'getPool', 'data' => []], JSON_UNESCAPED_UNICODE);
         $ret = static::communication($cammad);
         $data = json_decode($ret, true);
         if (!$data || $data['code'] != '1') {
-            return [];
+            throw new RuntimeException('获取运行中的任务失败：' . $data['msg']);
         }
 
         return $data['data'];
@@ -44,13 +42,13 @@ class CrontabService
      * @throws \Throwable    服务进程链接失败抛出异常
      * @return boolean
      */
-    public function reload(array $ids): bool
+    public static function reload(array $ids): bool
     {
         $cammad = json_encode(['fn' => 'reload', 'data' => $ids], JSON_UNESCAPED_UNICODE);
         $ret = static::communication($cammad);
         $data = json_decode($ret, true);
         if (!$data || $data['code'] != '1') {
-            return false;
+            throw new RuntimeException('重载任务失败：' . $data['msg']);
         }
 
         return true;
@@ -62,7 +60,7 @@ class CrontabService
      * @param string $messgae
      * @return string
      */
-    public function communication(string $messgae = 'ping'): string
+    public static function communication(string $messgae = 'ping'): string
     {
         $host = Server::getListenHost();
         $port = Server::getListenPort();
@@ -75,7 +73,7 @@ class CrontabService
      *
      * @return TaskManage
      */
-    public function getManage(): TaskManage
+    public static function getManage(): TaskManage
     {
         return TaskManage::instance();
     }
