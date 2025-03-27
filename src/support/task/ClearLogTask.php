@@ -15,7 +15,7 @@ use RecursiveDirectoryIterator;
  * @author Mon <985558837@qq.com>
  * @version 1.0.0
  */
-class DemoTask
+class ClearLogTask
 {
     /**
      * 执行定时任务
