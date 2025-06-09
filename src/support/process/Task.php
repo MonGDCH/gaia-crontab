@@ -143,7 +143,7 @@ class Task implements ProcessInterface
             foreach ($header as $v) {
                 $sendHeader[$v['name']] = $v['value'];
             }
-            Network::instance()->sendHTTP($query['url'], $sendData, $method, $sendHeader, false, $timeout, $ua);
+            Network::sendHTTP($query['url'], $sendData, $method, $sendHeader, false, $timeout, $ua);
             // 发起网络请求不记录响应内容
             $code = 1;
             $msg = '发起HTTP请求成功';

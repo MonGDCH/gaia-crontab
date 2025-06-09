@@ -38,7 +38,7 @@ class ClearLogTask
             if (is_numeric($date) && $date < $clearLog) {
                 $filePath = $file->getPathname();
                 Logger::instance()->channel()->info('Clear Log File: ' . $filePath);
-                File::instance()->removeFile($filePath);
+                File::removeFile($filePath);
             }
         }
         Logger::instance()->channel()->info('Clear Befor ' . $clearLog . ' Log File Task End');

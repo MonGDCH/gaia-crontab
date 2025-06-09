@@ -89,16 +89,16 @@
         },
         {
             "name": "mongdch/mon-util",
-            "version": "1.5.14",
+            "version": "1.6.0",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/mongdch/mon-util/1.5.14/mongdch-mon-util-1.5.14.zip",
-                "reference": "bfb0d70953bd012dcb7c2f76a7dde3cfc59bde3d",
+                "url": "https://mirrors.cloud.tencent.com/repository/composer/mongdch/mon-util/1.6.0/mongdch-mon-util-1.6.0.zip",
+                "reference": "1428cd338df7fb1c8203cd2a855560e87b260c14",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.0",
-                "psr/container": "1.0.0"
+                "psr/container": "^2.0.0"
             },
             "type": "library",
             "autoload": {
@@ -116,12 +116,12 @@
                 {
                     "name": "Mon",
                     "email": "985558837@qq.com",
-                    "homepage": "http://www.gdmon.com/",
+                    "homepage": "https://github.com/MonGDCH",
                     "role": "Developer"
                 }
             ],
             "description": "常用的PHP工具类库，包含了各种各式各样的工具，如：容器、时间、验证器、多语言、图片处理、二维码生成、IP地址解析、文件操作、数据安全、数据字典等等等等。。。",
-            "homepage": "http://gdmon.com/",
+            "homepage": "https://github.com/MonGDCH",
             "keywords": [
                 "mon",
                 "tool",
@@ -129,26 +129,26 @@
             ],
             "support": {
                 "issues": "https://github.com/MonGDCH/mon-util/issues",
-                "source": "https://github.com/MonGDCH/mon-util/tree/1.5.14"
+                "source": "https://github.com/MonGDCH/mon-util/tree/1.6.0"
             },
-            "time": "2025-02-27T06:49:21+00:00"
+            "time": "2025-06-09T03:54:33+00:00"
         },
         {
             "name": "psr/container",
-            "version": "1.0.0",
+            "version": "2.0.2",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/psr/container/1.0.0/psr-container-1.0.0.zip",
-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "url": "https://mirrors.tencent.com/repository/composer/psr/container/2.0.2/psr-container-2.0.2.zip",
+                "reference": "c71ecc56dfe541dbd90c5360474fbc405f8d5963",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=7.4.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -162,7 +162,7 @@
             "authors": [
                 {
                     "name": "PHP-FIG",
-                    "homepage": "http://www.php-fig.org/"
+                    "homepage": "https://www.php-fig.org/"
                 }
             ],
             "description": "Common Container Interface (PHP FIG PSR-11)",
@@ -176,16 +176,16 @@
             ],
             "support": {
                 "issues": "https://github.com/php-fig/container/issues",
-                "source": "https://github.com/php-fig/container/tree/master"
+                "source": "https://github.com/php-fig/container/tree/2.0.2"
             },
-            "time": "2017-02-14T16:28:37+00:00"
+            "time": "2021-11-05T16:47:00+00:00"
         },
         {
             "name": "psr/log",
             "version": "1.1.4",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/psr/log/1.1.4/psr-log-1.1.4.zip",
+                "url": "https://mirrors.tencent.com/repository/composer/psr/log/1.1.4/psr-log-1.1.4.zip",
                 "reference": "d49695b909c3b7628b6289db5479a1c204601f11",
                 "shasum": ""
             },
@@ -229,7 +229,7 @@
             "version": "v1.0.7",
             "dist": {
                 "type": "zip",
-                "url": "https://mirrors.cloud.tencent.com/repository/composer/workerman/crontab/v1.0.7/workerman-crontab-v1.0.7.zip",
+                "url": "https://mirrors.tencent.com/repository/composer/workerman/crontab/v1.0.7/workerman-crontab-v1.0.7.zip",
                 "reference": "74f51ca8204e8eb628e57bc0e640561d570da2cb",
                 "shasum": ""
             },
@@ -319,12 +319,12 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.2.0"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }

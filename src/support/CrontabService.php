@@ -64,7 +64,7 @@ class CrontabService
     {
         $host = Server::getListenHost();
         $port = Server::getListenPort();
-        $result = Network::instance()->sendTCP($host, $port, $messgae . "\n", false);
+        $result = Network::sendTCP($host, $port, $messgae . "\n", false);
         return trim((string)$result['result']);
     }
 
