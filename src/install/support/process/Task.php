@@ -43,7 +43,7 @@ class Task implements ProcessInterface
      * @param Worker $worker worker进程
      * @return void
      */
-    public function onWorkerStart(Worker $worker): void
+    public function onWorkerStart(Worker $worker)
     {
         // 日志通道初始化
         $log_channel = Config::instance()->get('crontab.app.log.channel', 'crontab');

@@ -1,3 +1,54 @@
+<?php
+
+declare(strict_types=1);
+
+namespace support\crontab\command;
+
+use mon\env\Config;
+use mon\thinkORM\Db;
+use mon\console\Input;
+use mon\console\Output;
+use mon\console\Command;
+
+/**
+ * 定时任务数据库初始化安装
+ *
+ * @author Mon <98555883@qq.com>
+ * @version 1.0.0
+ */
+class DbInitCommand extends Command
+{
+    /**
+     * 指令名
+     *
+     * @var string
+     */
+    protected static $defaultName = 'crontab:dbinit';
+
+    /**
+     * 指令描述
+     *
+     * @var string
+     */
+    protected static $defaultDescription = 'init crontab database table';
+
+    /**
+     * 指令分组
+     *
+     * @var string
+     */
+    protected static $defaultGroup = 'mon-crontab';
+
+    /**
+     * 执行指令
+     *
+     * @param  Input  $in  输入实例
+     * @param  Output $out 输出实例
+     * @return integer  exit状态码
+     */
+    public function execute(Input $in, Output $out)
+    {
+        $contabSql = <<<SQL
 CREATE TABLE IF NOT EXISTS `crontab` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '任务标题',
@@ -14,9 +65,11 @@ CREATE TABLE IF NOT EXISTS `crontab` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建日期',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='定时器任务表';
+SQL;
 
+        $logSql = <<<SQL
 CREATE TABLE IF NOT EXISTS `crontab_log` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `crontab_id` int(11) unsigned NOT NULL COMMENT '任务id',
   `running_time` float unsigned NOT NULL COMMENT '执行所用时间',
   `run_time` datetime NOT NULL COMMENT '执行任务时间',
@@ -28,3 +81,12 @@ CREATE TABLE IF NOT EXISTS `crontab_log` (
   PRIMARY KEY (`id`) USING BTREE,
   KEY `crontab_id` (`crontab_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC COMMENT='定时器任务执行日志表';
+SQL;
+        // 建表
+        Db::setConfig(Config::instance()->get('database', []));
+        Db::execute($contabSql);
+        Db::execute($logSql);
+
+        return $out->block('Init success!', 'SUCCESS');
+    }
+}

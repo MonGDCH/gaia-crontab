@@ -25,7 +25,7 @@ class Install
      * @var array
      */
     protected static $file_relation = [
-        'crontab.php'   => 'bin/crontab.php'
+        'install/crontab.php'   => 'bin/crontab.php'
     ];
 
     /**
@@ -34,9 +34,8 @@ class Install
      * @var array
      */
     protected static $dir_relation = [
-        'config'    => 'config/crontab',
-        'support'   => 'support/crontab',
-        'command'   => 'support/command/crontab'
+        'install/config'    => 'config/crontab',
+        'install/support'   => 'support/crontab',
     ];
 
     /**

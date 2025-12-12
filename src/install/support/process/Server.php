@@ -76,7 +76,7 @@ class Server implements ProcessInterface
      * @param Worker $worker worker进程
      * @return void
      */
-    public function onWorkerStart(Worker $worker): void
+    public function onWorkerStart(Worker $worker)
     {
         // 配置信息
         $this->lock_expires = Config::instance()->get('crontab.app.lock_expire', 600);
