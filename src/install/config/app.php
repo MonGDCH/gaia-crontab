@@ -15,11 +15,11 @@ return [
     // 业务锁缓存时间
     'lock_expire'   => 600,
     // 任务表表名
-    'task_table'    => 'crontab',
+    'task_table'    => env('CRONTAB_TASK_TABLE', 'crontab'),
     // 日志表表名
-    'log_table'     => 'crontab_log',
+    'log_table'     => env('CRONTAB_LOG_TABLE', 'crontab_log'),
     // 日志时间格式，空则为时间戳
-    'log_time_format' => 'Y-m-d H:i:s',
+    'log_time_format' => env('CRONTAB_LOG_TIME_FORMAT', 'Y-m-d H:i:s'),
     // 配置变量对应值
     'variable' => [
         // 任务状态
@@ -49,7 +49,7 @@ return [
         // 主服务进程
         'server'    => [
             // 监听协议端口，采用text协议，方便通信
-            'listen'        => 'text://127.0.0.1:7234',
+            'listen'        => 'text://127.0.0.1:' . env('CRONTAB_SERVER_PORT', 7234),
             // 额外参数
             'context'       => [],
             // 进程数，服务主进程，只能1个
@@ -68,11 +68,11 @@ return [
         // 任务处理进程
         'task'      => [
             // 监听协议端口，采用text协议，方便通信
-            'listen'        => 'text://127.0.0.1:7235',
+            'listen'        => 'text://127.0.0.1:' . env('CRONTAB_TASK_PORT', 7235),
             // 额外参数
             'context'       => [],
             // 进程数，异步任务处理进程，按需配置
-            'count'         => \gaia\App::cpuCount(),
+            'count'         => env('CRONTAB_TASK_COUNT', \gaia\App::cpuCount()),
             // 通信协议，一般不需要修改
             'transport'     => 'tcp',
             // 进程用户
