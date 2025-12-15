@@ -105,7 +105,7 @@ class Task implements ProcessInterface
             try {
                 $code = 1;
                 $params = $class['params'] ?? [];
-                $msg = Container::instance()->invokeMethd([$class['class'], $class['method']], [$params]);
+                $msg = Container::instance()->invokeMethod([$class['class'], $class['method']], [$params]);
             } catch (Throwable $e) {
                 $code = 0;
                 $msg = 'Msg: ' . $e->getMessage() . ' , File: ' . $e->getFile() . ' , Line: ' . $e->getLine();
