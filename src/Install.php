@@ -36,6 +36,7 @@ class Install
     protected static $dir_relation = [
         'install/config'    => 'config/crontab',
         'install/support'   => 'support/crontab',
+        'install/task'      => 'app/crontab',
     ];
 
     /**

@@ -38,13 +38,6 @@ class Crontab
     ];
 
     /**
-     * 开启插件支持
-     *
-     * @var boolean
-     */
-    protected $supportPlugin = true;
-
-    /**
      * 构造方法
      */
     public function __construct()
@@ -73,7 +66,7 @@ class Crontab
         App::init($this->name);
 
         // 加载插件
-        $this->supportPlugin && Plugin::register();
+        Plugin::register();
 
         // TODO 更多操作
 

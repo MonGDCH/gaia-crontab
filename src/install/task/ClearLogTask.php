@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace support\crontab\task;
+namespace app\crontab;
 
 use mon\util\File;
 use mon\log\Logger;

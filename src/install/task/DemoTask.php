@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace support\crontab\task;
+namespace app\crontab;
 
 /**
  * 演示定时任务

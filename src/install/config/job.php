@@ -11,12 +11,12 @@ return [
     [
         // 任务名称
         'title'     => '测试对象方法任务',
-        // 任务类型
+        // 任务类型, 0执行对象方法
         'type'      => 0,
         // 定时执行规则
         'rule'      => '0/10 * * * * *',
         // 任务执行目标对象, 使用 @ 定义方法名，默认方法名 handler
-        'target'    => \support\crontab\task\DemoTask::class,
+        'target'    => \app\crontab\DemoTask::class,
         // 目标对象参数
         'params'    => [],
         // 是否单次执行
@@ -27,7 +27,7 @@ return [
     [
         // 任务名称
         'title'     => '测试HTTP请求任务',
-        // 任务类型
+        // 任务类型，1执行HTTP请求
         'type'      => 1,
         // 定时执行规则
         'rule'      => '5 0 * * * *',
