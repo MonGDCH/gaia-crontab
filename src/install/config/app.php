@@ -71,8 +71,8 @@ return [
             'listen'        => 'text://127.0.0.1:' . env('CRONTAB_TASK_PORT', 7235),
             // 额外参数
             'context'       => [],
-            // 进程数，异步任务处理进程，按需配置
-            'count'         => env('CRONTAB_TASK_COUNT', \gaia\App::cpuCount()),
+            // 进程数，异步任务处理进程，按需配置，0则默认cpu数量
+            'count'         => env('CRONTAB_TASK_COUNT', 0),
             // 通信协议，一般不需要修改
             'transport'     => 'tcp',
             // 进程用户

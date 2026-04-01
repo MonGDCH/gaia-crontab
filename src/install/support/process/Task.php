@@ -33,7 +33,9 @@ class Task implements ProcessInterface
      */
     public static function getProcessConfig(): array
     {
-        return Config::instance()->get('crontab.app.process.task', []);
+        $config = Config::instance()->get('crontab.app.process.task', []);
+        $config['count'] = $config['count'] == 0 ? \gaia\App::cpuCount() : $config['count'];
+        return $config;
     }
 
     /**
