@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace gaia\command;
+namespace support\crontab\command;
 
 use mon\util\File;
 use mon\console\Input;
@@ -10,12 +10,12 @@ use mon\console\Output;
 use mon\console\Command;
 
 /**
- * 生成指令类文件指令
+ * 生成定时任务处理器文件指令
  * 
  * @author Mon <985558837@qq.com>
  * @version 1.0.0
  */
-class MakeControllerCommand extends Command
+class MakeTaskCommand extends Command
 {
     /**
      * 指令名
